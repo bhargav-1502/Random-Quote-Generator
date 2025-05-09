@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Quotes Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #e3f2fd; /* Updated background color to light blue */
+        }
+        h1 {
+            color: #333;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #6200ea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #3700b3;
+        }
+        #posts {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            text-align: center;
+        }
+        #posts p {
+            margin: 10px 0;
+        }
+        #posts p:first-child {
+            font-style: italic;
+            color: #555;
+        }
+        #posts p:last-child {
+            font-weight: bold;
+            color: #6200ea;
+        }
+    </style>
+</head>
+<body>
+    <h1>Quotes</h1>
+    <button onclick="loadPosts()">Load Data</button>
+    <div id="posts"></div>
+
+    <script>
+        function loadPosts() {
+            let parentDiv = document.getElementById('posts');
+            parentDiv.innerHTML = '';
+
+            fetch('https://jacintodesign.github.io/quotes-api/data/quotes.json')
+                .then((res) => {
+                    return res.json();
+                })
+                .then((data) => {
+                    let index = Math.ceil(Math.random() * data.length);
+                    let quote = data[index];
+                    
+                    let quoteDiv = document.createElement('div');
+                    quoteDiv.innerHTML = `<p><strong>Quote:</strong> ${quote.text}</p>
+                                         <p><strong>Author:</strong> ${quote.author || 'Unknown'}</p>`;
+                    parentDiv.appendChild(quoteDiv);
+                })
+                .catch((error) => {
+                    parentDiv.innerHTML = '<p>Error loading quote. Please try again.</p>';
+                    console.error('Error:', error);
+                });
+        }
+    </script>
+</body>
+</html>
